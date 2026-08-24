@@ -1,0 +1,167 @@
+{
+  "version": 1,
+  "skills": {
+    "agents-build": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-build/SKILL.md",
+      "computedHash": "fd56269398b1eb8056914b63ffc0f001e143486dd65f859ae7cee98404b18632"
+    },
+    "agents-connect": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-connect/SKILL.md",
+      "computedHash": "cea438a5e1659acec605ee83949d95dd4d47f5fd16e9864774740f3b57d95a02"
+    },
+    "agents-debug": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-debug/SKILL.md",
+      "computedHash": "4d7b12d5948f89ca25e0df9290f3e4454501e252671aa07ba5cce8d885fbe61e"
+    },
+    "agents-deploy": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-deploy/SKILL.md",
+      "computedHash": "087c4f8831cc136053422986866ce9a6634bb0a836ed61d205c5faee2ecc98d3"
+    },
+    "agents-get-started": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-get-started/SKILL.md",
+      "computedHash": "7c41e3311565a21d53e130de1bb2b9b47085a2fc36015cfe5773224caa94ec26"
+    },
+    "agents-harden": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-harden/SKILL.md",
+      "computedHash": "163d71b4459ba2e396aa518f4973bc3a8dfc780749bbf1b9cb850ee5e4133956"
+    },
+    "agents-optimize": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-agents/skills/agents-optimize/SKILL.md",
+      "computedHash": "438777454dd381afe831c00ffdc8e61f29810562aa251170ddb0c2714c5580cb"
+    },
+    "amazon-bedrock": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/amazon-bedrock/SKILL.md",
+      "computedHash": "a8237913e5c42ae09095d8a8682f984862ffb68698fb5e46e4ef6553ac362c6c"
+    },
+    "aws-billing-and-cost-management": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-billing-and-cost-management/SKILL.md",
+      "computedHash": "3ba0125ac6c2cf7487ae01a3b8e78b247fe227c2935c92e0284d5b2577c48844"
+    },
+    "aws-iam": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-iam/SKILL.md",
+      "computedHash": "67b278df3b015551bc81ebca239866fde4832090211fdd923274ef5d0af87d72"
+    },
+    "aws-observability": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-observability/SKILL.md",
+      "computedHash": "fdcc252cef2f61c3775cbd0bf6a2ed758fd5e5d16a1d10f36479b584b4ee4098"
+    },
+    "aws-sdk-js-v3-usage": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-sdk-js-v3-usage/SKILL.md",
+      "computedHash": "b2c5175e7e8951cb6b2d65ddda09187906feb222cdd97a3757a82f7fa142a873"
+    },
+    "aws-secrets-manager": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "plugins/aws-core/skills/aws-secrets-manager/SKILL.md",
+      "computedHash": "d8910c1086c8337494cc2876d8e2cb79096e5e99130bd33357660e71d81d2f5d"
+    },
+    "aws-serverless": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-serverless/SKILL.md",
+      "computedHash": "f932a616f7b064c4355e6acfe156fb146259438ceb53c8cde06f00e7725bea06"
+    },
+    "aws-storage": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/aws-storage/SKILL.md",
+      "computedHash": "eebda90188e0133196f897311e1508f2593119e7bb10392068f77f0938f97b1b"
+    },
+    "create-adaptable-composable": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/create-adaptable-composable/SKILL.md",
+      "computedHash": "2f215126499d29a733be980ef9ce8f4ffb5f25a8831aec965d86c0cd21b2c5d2"
+    },
+    "music": {
+      "source": "elevenlabs/skills",
+      "sourceType": "github",
+      "skillPath": "music/SKILL.md",
+      "computedHash": "700db7e91072baece800c4ce3394b8dabd14442f25e9fa706fde34a2bdf58431"
+    },
+    "setup-api-key": {
+      "source": "elevenlabs/skills",
+      "sourceType": "github",
+      "skillPath": "setup-api-key/SKILL.md",
+      "computedHash": "4ac954d8b49696ad1ea0400e36f0170273dea547628896f7a37926db7011a8ae"
+    },
+    "signing-in-to-aws": {
+      "source": "aws/agent-toolkit-for-aws",
+      "sourceType": "github",
+      "skillPath": "skills/core-skills/signing-in-to-aws/SKILL.md",
+      "computedHash": "721b70d3e162a1d6b76567ff183ff49a1368e3c25b5c9792371668b7e9256857"
+    },
+    "sound-effects": {
+      "source": "elevenlabs/skills",
+      "sourceType": "github",
+      "skillPath": "sound-effects/SKILL.md",
+      "computedHash": "54ec05122413cbc956b28fbd81c676e44eb0fdbbf6459ee3b367b2c7a1350b02"
+    },
+    "vue-best-practices": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-best-practices/SKILL.md",
+      "computedHash": "3df585ad31aec78fe55c56c1411262737e6b231677a3153dec512a882fde80cd"
+    },
+    "vue-debug-guides": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-debug-guides/SKILL.md",
+      "computedHash": "fa7b31c32a6717ae47cd2ea208773e27536225ad053a564effe656bf927fe9ef"
+    },
+    "vue-jsx-best-practices": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-jsx-best-practices/SKILL.md",
+      "computedHash": "f78720a9904eb748af26cff651aaf8c0c8e6a72f9ee30e6f0626fc45e33cfd9a"
+    },
+    "vue-options-api-best-practices": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-options-api-best-practices/SKILL.md",
+      "computedHash": "b35263a402e34a93e089cdf6d2e714d2dc1670a1f834ce67215552c4a70a864c"
+    },
+    "vue-pinia-best-practices": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-pinia-best-practices/SKILL.md",
+      "computedHash": "d4ba913bec21910b8e37b2115cd964df2dc43ad62346b981c7b88d4ddc8cf792"
+    },
+    "vue-router-best-practices": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-router-best-practices/SKILL.md",
+      "computedHash": "f0745ed318c113e592ab4a9ded57ceadd0db2edab00cdb46b216c83f5ce0799e"
+    },
+    "vue-testing-best-practices": {
+      "source": "vuejs-ai/skills",
+      "sourceType": "github",
+      "skillPath": "skills/vue-testing-best-practices/SKILL.md",
+      "computedHash": "58d365899f54be9e5fa2c2e455093f9567620600578ae92aaa2f31d9b19a59ad"
+    }
+  }
+}

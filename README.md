@@ -8,7 +8,12 @@ loop of the scene so the character keeps typing while you work.
 The UI runs immediately with the bundled placeholder artwork. Each generation provider is
 independent and opt-in: add only the credentials for the features you want.
 
-<!-- Add a screenshot or short clip of your own station here. -->
+![The Compile & Chill station with the Station Director panel open](docs/station.png)
+
+Fullscreen scene mode, with the auto-hiding control bar. The bar fades out after three seconds
+of no input and returns on any tap or mouse move:
+
+![Fullscreen scene mode showing only the artwork and a small control bar](docs/fullscreen.png)
 
 ## Features
 
@@ -165,6 +170,35 @@ URL-redacted before it is surfaced anywhere.
 Some providers run a person-likeness classifier over input frames and may refuse an
 illustration that reads as photographic. If that happens, regenerate the scene so it looks
 flatter and more clearly hand-drawn.
+
+## Agent skills
+
+This project was built with [Kiro](https://kiro.dev) using agent skills — focused instruction
+files that teach a coding agent a specific domain. `skills-lock.json` pins the exact upstream
+source and content hash of every skill used, so you can reinstall the same set:
+
+```bash
+npx skills install
+```
+
+| Source | Count | Covers |
+| --- | --- | --- |
+| [`aws/agent-toolkit-for-aws`](https://github.com/aws/agent-toolkit-for-aws) | 16 | Bedrock, IAM, S3, SAM/serverless, observability, Secrets Manager, cost management, agent build/deploy/harden |
+| [`vuejs-ai/skills`](https://github.com/vuejs-ai/skills) | 8 | Vue best practices, testing, router, Pinia, JSX, composables, debugging |
+| [`elevenlabs/skills`](https://github.com/elevenlabs/skills) | 3 | Music generation, sound effects, API key setup |
+
+The third-party skill *content* is intentionally not vendored here — it belongs to those
+upstream projects and carries their licenses. The lockfile records what to fetch and verifies
+it by hash.
+
+One skill in this repo is original and specific to this project:
+
+- **`skills/openrouter-video-loop/SKILL.md`** — the policy for generating a controlled,
+  camera-locked illustrated video loop: require first/last frame support, keep the source URL
+  private and short-lived, demand explicit confirmation before spending, and reject output that
+  drifts the camera or changes the character.
+
+`.kiro/settings/mcp.json` also configures the AWS MCP server used during development.
 
 ## Using it
 
