@@ -1,0 +1,241 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Private S3 station storage, CloudTrail data auditing, and monitoring for Compile & Chill FM.
+
+Parameters:
+  TrailName:
+    Type: String
+    Default: compile-and-chill-station-data-events
+    AllowedPattern: '[A-Za-z0-9._-]{3,128}'
+
+Resources:
+  StationMediaBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub 'compile-and-chill-stations-${AWS::AccountId}-${AWS::Region}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-replaced-station-assets
+            Status: Enabled
+            Prefix: stations/
+            NoncurrentVersionExpiration:
+              NoncurrentDays: 7
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 1
+      MetricsConfigurations:
+        - Id: station-requests
+          Prefix: stations/
+      Tags:
+        - Key: Application
+          Value: compile-and-chill
+        - Key: DataClassification
+          Value: private-generated-media
+        - Key: ManagedBy
+          Value: cloudformation
+
+  StationMediaBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref StationMediaBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt StationMediaBucket.Arn
+              - !Sub '${StationMediaBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
+  CloudTrailLogKey:
+    Type: AWS::KMS::Key
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      Description: Encrypts Compile and Chill CloudTrail audit logs.
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: EnableAccountAdministration
+            Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:root'
+            Action: kms:*
+            Resource: '*'
+          - Sid: AllowCloudTrailEncryptLogs
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: kms:GenerateDataKey*
+            Resource: '*'
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub 'arn:${AWS::Partition}:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${TrailName}'
+              StringLike:
+                kms:EncryptionContext:aws:cloudtrail:arn: !Sub 'arn:${AWS::Partition}:cloudtrail:*:${AWS::AccountId}:trail/*'
+          - Sid: AllowCloudTrailDecryptTrail
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: kms:Decrypt
+            Resource: '*'
+          - Sid: AllowCloudTrailDescribeKey
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: kms:DescribeKey
+            Resource: '*'
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub 'arn:${AWS::Partition}:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${TrailName}'
+      Tags:
+        - Key: Application
+          Value: compile-and-chill
+        - Key: ManagedBy
+          Value: cloudformation
+
+  CloudTrailLogKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName: alias/compile-and-chill-cloudtrail
+      TargetKeyId: !Ref CloudTrailLogKey
+
+  CloudTrailLogBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub 'compile-and-chill-audit-${AWS::AccountId}-${AWS::Region}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: Enabled
+      Tags:
+        - Key: Application
+          Value: compile-and-chill
+        - Key: DataClassification
+          Value: private-audit-logs
+        - Key: ManagedBy
+          Value: cloudformation
+
+  CloudTrailLogBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref CloudTrailLogBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: AllowCloudTrailGetBucketAcl
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: s3:GetBucketAcl
+            Resource: !GetAtt CloudTrailLogBucket.Arn
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub 'arn:${AWS::Partition}:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${TrailName}'
+          - Sid: AllowCloudTrailWriteLogs
+            Effect: Allow
+            Principal:
+              Service: cloudtrail.amazonaws.com
+            Action: s3:PutObject
+            Resource: !Sub '${CloudTrailLogBucket.Arn}/cloudtrail/AWSLogs/${AWS::AccountId}/*'
+            Condition:
+              StringEquals:
+                aws:SourceArn: !Sub 'arn:${AWS::Partition}:cloudtrail:${AWS::Region}:${AWS::AccountId}:trail/${TrailName}'
+                s3:x-amz-acl: bucket-owner-full-control
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: '*'
+            Action: s3:*
+            Resource:
+              - !GetAtt CloudTrailLogBucket.Arn
+              - !Sub '${CloudTrailLogBucket.Arn}/*'
+            Condition:
+              Bool:
+                aws:SecureTransport: 'false'
+
+  StationDataTrail:
+    Type: AWS::CloudTrail::Trail
+    DependsOn: CloudTrailLogBucketPolicy
+    Properties:
+      TrailName: !Ref TrailName
+      S3BucketName: !Ref CloudTrailLogBucket
+      S3KeyPrefix: cloudtrail
+      KMSKeyId: !GetAtt CloudTrailLogKey.Arn
+      EnableLogFileValidation: true
+      IncludeGlobalServiceEvents: false
+      IsLogging: true
+      IsMultiRegionTrail: false
+      EventSelectors:
+        - IncludeManagementEvents: true
+          ReadWriteType: All
+          DataResources:
+            - Type: AWS::S3::Object
+              Values:
+                - !Sub '${StationMediaBucket.Arn}/'
+
+  StationDeleteRequestsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: compile-and-chill-station-delete-requests
+      AlarmDescription: Detects private station media deletion requests; inspect CloudTrail before taking action.
+      Namespace: AWS/S3
+      MetricName: DeleteRequests
+      Dimensions:
+        - Name: BucketName
+          Value: !Ref StationMediaBucket
+        - Name: FilterId
+          Value: station-requests
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+
+Outputs:
+  StationMediaBucketName:
+    Description: Configure this as STATION_S3_BUCKET in the local app environment.
+    Value: !Ref StationMediaBucket
+  StationMediaBucketRegion:
+    Description: Configure this as STATION_S3_REGION in the local app environment.
+    Value: !Ref AWS::Region
+  CloudTrailName:
+    Description: CloudTrail auditing S3 data events for the private station bucket.
+    Value: !Ref StationDataTrail
+  CloudTrailLogBucketName:
+    Description: Private, KMS-encrypted CloudTrail log bucket.
+    Value: !Ref CloudTrailLogBucket

@@ -1,0 +1,26 @@
+{
+  "name": "compile-and-chill-poc",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev --port 8231",
+    "build": "nuxt build",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest run",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "3.1116.0",
+    "@aws-sdk/client-s3": "3.1116.0",
+    "@aws-sdk/s3-request-presigner": "3.1116.0",
+    "@openrouter/agent": "0.11.0",
+    "nuxt": "4.5.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "26.2.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11",
+    "vue-tsc": "3.3.11"
+  }
+}

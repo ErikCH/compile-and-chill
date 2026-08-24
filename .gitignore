@@ -1,0 +1,12 @@
+node_modules/
+.nuxt/
+.output/
+.data/
+.env
+.env.*
+!.env.example
+coverage/
+generated/
+*.mp3
+*.wav
+.DS_Store
